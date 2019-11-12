@@ -9,6 +9,39 @@
     android:background="@color/cardview_dark_background"
     android:padding="20dp">
 
+    <RadioGroup
+        android:id="@+id/grpType"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <RadioButton
+            android:id="@+id/rBtnIncome"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:text="Income"
+            android:layout_weight="1"
+            android:buttonTint="#b6f235"
+            android:textColor="#b6f235"/>
+
+        <RadioButton
+            android:id="@+id/rBtnExpense"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:text="Expense"
+            android:layout_weight="1"
+            android:buttonTint="#b6f235"
+            android:textColor="#b6f235"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/typeError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please select transaction type"
+        android:gravity="center"
+        android:textColor="#f23a3a"
+        android:visibility="gone"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -36,7 +69,8 @@
         android:layout_height="50dp"
         android:backgroundTint="#b6f235"
         android:textColor="#b6f235"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:inputType="numberDecimal"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,36 +85,25 @@
         android:textColor="#b6f235"
         android:textSize="16sp"/>
 
+
+
     <Spinner
         android:id="@+id/spnCategory"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:backgroundTint="#b6f235"/>
+        android:backgroundTint="#b6f235"
+        android:visibility="gone"/>
 
-    <RadioGroup
-        android:id="@+id/grpType"
+    <TextView
+        android:id="@+id/catError"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <RadioButton
-            android:id="@+id/rBtnIncome"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:text="Income"
-            android:layout_weight="1"
-            android:buttonTint="#b6f235"
-            android:textColor="#b6f235"/>
+        android:layout_height="wrap_content"
+        android:text="Please select transaction category"
+        android:gravity="center"
+        android:textColor="#f23a3a"
+        android:visibility="gone"/>
 
-        <RadioButton
-            android:id="@+id/rBtnExpense"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:text="Expense"
-            android:layout_weight="1"
-            android:buttonTint="#b6f235"
-            android:textColor="#b6f235"/>
-    </RadioGroup>
+
 
     <LinearLayout
         android:layout_width="match_parent"

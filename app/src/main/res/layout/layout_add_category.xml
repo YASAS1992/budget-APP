@@ -36,7 +36,8 @@
         android:layout_height="50dp"
         android:backgroundTint="#b6f235"
         android:textColor="#b6f235"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:inputType="numberDecimal"/>
 
 
     <LinearLayout

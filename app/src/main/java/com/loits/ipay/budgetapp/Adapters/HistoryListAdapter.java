@@ -46,13 +46,9 @@ public class HistoryListAdapter extends ArrayAdapter {
         if(transactions.size()>position){
             holder.tvName.setText(transactions.get(position).getName());
             holder.tvAmount.setText(String.valueOf(transactions.get(position).getAmount()));
-            holder.tvDate.setText(transactions.get(position).getDate());
+            holder.tvDate.setText(transactions.get(position).getDate().toString());
+            holder.tvType.setText(transactions.get(position).getType());
 
-            if(transactions.get(position).getType() == 0){
-                holder.tvType.setText("Income");
-            }else{
-                holder.tvType.setText("Expense");
-            }
         }
 
         return rowView;

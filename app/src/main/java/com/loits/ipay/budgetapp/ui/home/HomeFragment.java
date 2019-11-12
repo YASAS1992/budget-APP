@@ -1,10 +1,12 @@
 package com.loits.ipay.budgetapp.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -12,29 +14,29 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.loits.ipay.budgetapp.Adapters.CategorySpnAdapter;
 import com.loits.ipay.budgetapp.MainActivity;
 import com.loits.ipay.budgetapp.R;
 import com.loits.ipay.budgetapp.models.Category;
-import com.loits.ipay.budgetapp.models.Transaction;
+import com.loits.ipay.budgetapp.models.Expense;
+import com.loits.ipay.budgetapp.models.Income;
 
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.sql.StatementEvent;
+
 public class HomeFragment extends Fragment {
 
     MainActivity mainActivity;
     private LinearLayout lytAddTransaction,lytAddCategory;
-    private TextView tvAddTransaction,tvAddCategory;
+    private TextView tvAddTransaction,tvAddCategory,typeError,catError;
 
-    private EditText etTrnsName,etTrnsAmount,etTrnsDescription,etCatName,etCatProp;
+    private EditText etTrnsName,etTrnsAmount,etTrnsDescription,etCatName, etCatAmount;
     Spinner spnCategory;
     RadioGroup grpType;
     RadioButton rBtnIncome,rBtnExpense;
@@ -70,12 +72,14 @@ public class HomeFragment extends Fragment {
         grpType = v.findViewById(R.id.grpType);
         rBtnIncome = v.findViewById(R.id.rBtnIncome);
         rBtnExpense = v.findViewById(R.id.rBtnExpense);
+        typeError = v.findViewById(R.id.typeError);
+        catError = v.findViewById(R.id.catError);
         etSaveTrns = v.findViewById(R.id.etSaveTrns);
         etCloseTrns = v.findViewById(R.id.etCloseTrns);
 
         //Add Category
         etCatName = v.findViewById(R.id.etCatName);
-        etCatProp = v.findViewById(R.id.etCatProp);
+        etCatAmount = v.findViewById(R.id.etCatProp);
         etSaveCat = v.findViewById(R.id.etSaveCat);
         etCloseCat = v.findViewById(R.id.etCloseCat);
 
@@ -95,19 +99,37 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        rBtnExpense.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    spnCategory.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        rBtnIncome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    spnCategory.setVisibility(View.GONE);
+                }
+            }
+        });
+
         return v;
     }
 
     public void getSummaryData(){
 
-        tvTotalIncome.setText(String.valueOf(mainActivity.trackerApp.getTotalIncome()));
-        tvTotalExpense.setText(String.valueOf(mainActivity.trackerApp.getTotalExpense()));
-        tvBalance.setText(String.valueOf(mainActivity.trackerApp.getTotalIncome()-mainActivity.trackerApp.getTotalExpense()));
+        tvTotalIncome.setText(String.valueOf(mainActivity.trackerApp.getTotalIncomeForThisMonth()));
+        tvTotalExpense.setText(String.valueOf(mainActivity.trackerApp.getTotalExpenseForThisMonth()));
+        tvBalance.setText(String.valueOf(mainActivity.trackerApp.getTotalIncomeForThisMonth()-mainActivity.trackerApp.getTotalExpenseForThisMonth()));
 
-        if(mainActivity.trackerApp.getTotalIncome()==0.0 && mainActivity.trackerApp.getTotalExpense()==0.0){
+        if(mainActivity.trackerApp.getTotalIncomeForThisMonth()==0.0 && mainActivity.trackerApp.getTotalExpenseForThisMonth()==0.0){
             lytGraph.setVisibility(View.GONE);
         }else {
-            visualizeSummarry(mainActivity.trackerApp.getTotalIncome(),mainActivity.trackerApp.getTotalExpense());
+            visualizeSummarry(mainActivity.trackerApp.getTotalIncomeForThisMonth(),mainActivity.trackerApp.getTotalExpenseForThisMonth());
         }
 
     }
@@ -161,24 +183,60 @@ public class HomeFragment extends Fragment {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Date date = new Date();
 
-                int type;
-
                 if(rBtnExpense.isChecked()){
-                    type = 1;
-                }else{
-                    type = 0;
+
+                    if(etTrnsName.getText().toString().isEmpty()){
+                        etTrnsName.requestFocus();
+                        etTrnsName.setError("Please enter name.");
+                    }else if(etTrnsAmount.getText().toString().isEmpty() || Double.parseDouble(etTrnsAmount.getText().toString())==0.0){
+                        etTrnsAmount.requestFocus();
+                        etTrnsAmount.setError("Please enter amount");
+                    }else if(selectedCategory== null){
+                        catError.setVisibility(View.VISIBLE);
+                    }else if(Double.parseDouble(etTrnsAmount.getText().toString())>(selectedCategory.getAmount() - mainActivity.trackerApp.getCurrentCatSum(selectedCategory.getId()))){
+                        Log.d("Cat", String.valueOf(selectedCategory.getAmount()));
+                        Log.d("Cat-R", String.valueOf(mainActivity.trackerApp.getCurrentCatSum(selectedCategory.getId())));
+                        Log.d("Cat-N", selectedCategory.getName()+"||"+String.valueOf(selectedCategory.getAmount()));
+                        etTrnsAmount.requestFocus();
+                        etTrnsAmount.setError("Max amount can be added to this category is "+ String.valueOf(selectedCategory.getAmount() - mainActivity.trackerApp.getCurrentCatSum(selectedCategory.getId())));
+                    }else{
+                        Expense e = new Expense(Double.parseDouble(etTrnsAmount.getText().toString()),
+                                etTrnsDescription.getText().toString(),
+                                date,
+                                etTrnsName.getText().toString(),
+                                selectedCategory,
+                                mainActivity.trackerApp.getExpenses().size());
+
+                        mainActivity.trackerApp.addNewExpense(e);
+                        getSummaryData();
+                        lytAddTransaction.setVisibility(View.GONE);
+                    }
+
+                }else if(rBtnIncome.isChecked()){
+
+                    if(etTrnsName.getText().toString().isEmpty()){
+                        etTrnsName.requestFocus();
+                        etTrnsName.setError("Please enter name.");
+                    }else if(etTrnsAmount.getText().toString().isEmpty() || Double.parseDouble(etTrnsAmount.getText().toString())==0.0){
+                        etTrnsAmount.requestFocus();
+                        etTrnsAmount.setError("Please enter amount");
+                    }else{
+                        Income i = new Income(Double.parseDouble(etTrnsAmount.getText().toString()),
+                                etTrnsDescription.getText().toString(),
+                                date,
+                                mainActivity.trackerApp.getIncomes().size(),
+                                etTrnsName.getText().toString());
+
+                        mainActivity.trackerApp.addNewIncome(i);
+                        getSummaryData();
+                        lytAddTransaction.setVisibility(View.GONE);
+                    }
+
+                }else {
+                    typeError.setVisibility(View.VISIBLE);
                 }
 
-                Transaction transaction = new Transaction(etTrnsName.getText().toString(),
-                        Double.parseDouble(etTrnsAmount.getText().toString()),
-                        etTrnsDescription.getText().toString(),
-                        type,
-                        selectedCategory.getName(),
-                        formatter.format(date),
-                        mainActivity.trackerApp.getTransactions().size());
-                mainActivity.trackerApp.addNewTransaction(transaction);
-                getSummaryData();
-                lytAddTransaction.setVisibility(View.GONE);
+
             }
         });
 
@@ -198,13 +256,23 @@ public class HomeFragment extends Fragment {
         etSaveCat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Category category = new Category(mainActivity.trackerApp.getCategories().size(),
-                        etCatName.getText().toString(),
-                        Double.parseDouble(etCatProp.getText().toString()));
 
-                mainActivity.trackerApp.addNewCategory(category);
-                getSummaryData();
-                lytAddCategory.setVisibility(View.GONE);
+                if(etCatName.getText().toString().isEmpty()){
+                    etCatName.requestFocus();
+                    etCatName.setError("Please enter category name.");
+                }else if(etCatAmount.getText().toString().isEmpty() || Double.parseDouble(etCatAmount.getText().toString()) == 0.0){
+                    etCatAmount.requestFocus();
+                    etCatAmount.setError("Please enter amount;");
+                }else{
+                    Category category = new Category(mainActivity.trackerApp.getCategories().size(),
+                            etCatName.getText().toString(),
+                            Double.parseDouble(etCatAmount.getText().toString()));
+
+                    mainActivity.trackerApp.addNewCategory(category);
+                    getSummaryData();
+                    lytAddCategory.setVisibility(View.GONE);
+                }
+
             }
         });
 

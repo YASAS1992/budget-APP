@@ -4,12 +4,12 @@ import java.io.Serializable;
 public class Category implements Serializable{
     private int id;
     private String Name;
-    private double Propotion;//propotion of total income.
+    private double Amount;//propotion of total income.
 
-    public Category(int id, String name, double propotion) {
+    public Category(int id, String name, double Amount) {
         this.id = id;
         Name = name;
-        Propotion = propotion;
+        this.Amount = Amount;
     }
 
     public int getId() {
@@ -28,12 +28,12 @@ public class Category implements Serializable{
         Name = name;
     }
 
-    public double getPropotion() {
-        return Propotion;
+    public double getAmount() {
+        return Amount;
     }
 
-    public void setPropotion(double propotion) {
-        Propotion = propotion;
+    public void setAmount(double amount) {
+        Amount = amount;
     }
 }
 

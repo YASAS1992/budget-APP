@@ -1,56 +1,137 @@
 package com.loits.ipay.budgetapp.models;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 public class ExpenseTrackerApp {
     private static ArrayList<Transaction> transactions;
     private static ArrayList<Category> categories;
+    private static ArrayList<Income> incomes;
+    private static ArrayList<Expense> expenses;
 
     public ExpenseTrackerApp() {
         transactions = new ArrayList<>();
         categories = new ArrayList<>();
+        incomes = new ArrayList<>();
+        expenses = new ArrayList<>();
     }
 
-    public void addNewTransaction(Transaction transaction){
-        transactions.add(transaction);
+
+    public void addNewIncome(Income income){
+        incomes.add(income);
     }
 
-    public String updateTransaction(int id, Transaction transaction){
-        for (int i = 0; i < transactions.size(); i++) {
-            if(transactions.get(i).getID()==id){
-                transactions.add(i,transaction);
-                return "Transaction updated Successfully";
+    public String updateIcome(int id, Income income){
+        for (int i = 0; i < incomes.size(); i++) {
+            if(incomes.get(i).getID()==id){
+                incomes.add(i,income);
+                return "Income updated Successfully";
             }
         }
-        return "Transaction not found";
+        return "Income not found";
     }
 
-    public ArrayList<Transaction> getTransactions() {
-        return transactions;
-    }
+    public ArrayList<Income> getIncomes(){return incomes;}
 
-    public Transaction getUniqueTransaction(int id){
-        for (int i = 0; i < transactions.size(); i++) {
-            if(transactions.get(i).getID()==id)
-                return transactions.get(i);
+    public Income getUniqueIncome(int id){
+        for (int i = 0; i < incomes.size(); i++) {
+            if(incomes.get(i).getID()==id)
+                return incomes.get(i);
         }
 
         return null;
     }
 
-    public String deleteTransaction(int id){
-        for (int i = 0; i < transactions.size(); i++) {
-            if(transactions.get(i).getID()==id){
-               transactions.remove(i);
-               return "Transaction Delete Successfully";
-            }
+    public double getTotalIncomeForThisMonth(){
+        double total = 0.0;
+        for (int i = 0; i < incomes.size(); i++) {
+            if(isCurrentMonth(incomes.get(i).getDate()))
+                total += incomes.get(i).getAmount();
         }
-        return "Transaction Not Found";
+        return total;
     }
 
-    public void setTransactions(ArrayList<Transaction> transactions) {
-        transactions = transactions;
+    public String deleteIncome(int id){
+        for (int i = 0; i < incomes.size(); i++) {
+            if(incomes.get(i).getID()==id){
+                incomes.remove(i);
+                return "Income Delete Successfully";
+            }
+        }
+        return "Income Not Found";
     }
+
+    public void addNewExpense(Expense expense){
+        expenses.add(expense);
+    }
+
+    public String updateExpense(int id,Expense expense){
+        for (int i = 0; i < expenses.size(); i++) {
+            if(expenses.get(i).getID()==id){
+                expenses.add(i,expense);
+                return "Expense updated Successfully";
+            }
+        }
+        return "Expense not found";
+    }
+
+    public ArrayList<Expense> getExpenses(){return expenses;}
+
+    public Expense getUniqueExpense(int id){
+        for (int i = 0; i < expenses.size(); i++) {
+            if(expenses.get(i).getID()==id)
+                return expenses.get(i);
+        }
+
+        return null;
+    }
+
+    public double getTotalExpenseForThisMonth(){
+        double total = 0.0;
+        for (int i = 0; i < expenses.size(); i++) {
+            if(isCurrentMonth(expenses.get(i).getDate()))
+                total += expenses.get(i).getAmount();
+        }
+        return total;
+    }
+
+    public String deleteExpense(int id){
+        for (int i = 0; i < expenses.size(); i++) {
+            if(expenses.get(i).getID()==id){
+                expenses.remove(i);
+                return "Expense Delete Successfully";
+            }
+        }
+        return "Expense Not Found";
+    }
+
+
+    public ArrayList<Transaction> getAllTransactions(){
+        ArrayList<Transaction> transactions = new ArrayList<>();
+
+        for (int i = 0; i < incomes.size(); i++) {
+            Transaction transaction = incomes.get(i);
+            transactions.add(transaction);
+        }
+
+        for (int i = 0; i < expenses.size(); i++) {
+            Transaction transaction = expenses.get(i);
+            transactions.add(transaction);
+        }
+
+        Collections.sort(transactions, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction t1, Transaction t2) {
+                    return Long.valueOf(t1.getDate().getTime()).compareTo(t2.getDate().getTime());
+            }
+        });
+
+        return transactions;
+    }
+
 
     public void addNewCategory(Category category){
         categories.add(category);
@@ -93,27 +174,33 @@ public class ExpenseTrackerApp {
         return "Category Not Found";
     }
 
-    public double getTotalIncome(){
-        double totalIncome = 0.0;
+    public double getCurrentCatSum(int id){
+        double catSum = 0.0;
 
-        for (int i = 0; i < transactions.size(); i++) {
-            if(transactions.get(i).getType()==0){
-                totalIncome += transactions.get(i).getAmount();
+        for (int i = 0; i < expenses.size(); i++) {
+            if(expenses.get(i).getCategory().getId()==id && isCurrentMonth(expenses.get(i).getDate())){
+                catSum += expenses.get(i).getAmount();
             }
         }
 
-        return totalIncome;
+        return catSum;
     }
 
-    public double getTotalExpense(){
-        double totalExpense = 0.0;
+    public boolean isCurrentMonth(Date date){
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(date);
+        cal2.setTime(new Date());
 
-        for (int i = 0; i < transactions.size(); i++) {
-            if(transactions.get(i).getType()==1){
-                totalExpense += transactions.get(i).getAmount();
+        if(cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) {
+            if(cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)) {
+                return true;
+            }else{
+                return false;
             }
+        }else{
+            return false;
         }
-
-        return totalExpense;
     }
+
 }

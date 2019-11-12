@@ -1,4 +1,5 @@
 package com.loits.ipay.budgetapp.models;
+
 import java.util.Date;
 
 public class Transaction {
@@ -8,18 +9,17 @@ public class Transaction {
     private double Amount;
     private String Description;
     private String Category;
-    private int Type;
-    private String date;
+    private String type;
+    private Date date;
     private int transactionID;
 
-    public Transaction(String name, double Amount, String Description, int Type, String Category, String date, int transactionID) {
+    public Transaction(double Amount, String Description, Date date, int transactionID, String name,String type) {
         this.Amount=Amount;
         this.Description=Description;
-        this.Type=Type;
-        this.Category=Category;
         this.date=date;
         this.Name=name;
         this.transactionID=transactionID;
+        this.type = type;
     }
 
     public int getID() {
@@ -54,27 +54,27 @@ public class Transaction {
         Description = description;
     }
 
-    public String getCategory() {
-        return Category;
+//    public String getCategory() {
+//        return Category;
+//    }
+
+//    public void setCategory(String category) {
+//        Category = category;
+//    }
+
+    public String getType() {
+        return type;
     }
 
-    public void setCategory(String category) {
-        Category = category;
-    }
+//    public void setType(int type) {
+//        type = type;
+//    }
 
-    public int getType() {
-        return Type;
-    }
-
-    public void setType(int type) {
-        Type = type;
-    }
-
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

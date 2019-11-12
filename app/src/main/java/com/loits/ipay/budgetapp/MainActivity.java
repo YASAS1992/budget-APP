@@ -5,7 +5,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.loits.ipay.budgetapp.models.ExpenseTrackerApp;
-import com.loits.ipay.budgetapp.ui.dashboard.DashboardFragment;
+import com.loits.ipay.budgetapp.ui.dashboard.CategoryFragment;
 import com.loits.ipay.budgetapp.ui.home.HomeFragment;
 import com.loits.ipay.budgetapp.ui.notifications.HistoryFragment;
 
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
 
             case R.id.navigation_dashboard:
-                fragment = new DashboardFragment();
+                fragment = new CategoryFragment();
                 break;
 
             case R.id.navigation_notifications:

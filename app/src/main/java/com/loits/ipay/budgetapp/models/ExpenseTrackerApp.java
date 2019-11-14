@@ -24,10 +24,13 @@ public class ExpenseTrackerApp {
         incomes.add(income);
     }
 
-    public String updateIcome(int id, Income income){
+    public String updateIcome(Transaction t){
         for (int i = 0; i < incomes.size(); i++) {
-            if(incomes.get(i).getID()==id){
-                incomes.add(i,income);
+            if(incomes.get(i).getID()==t.getID()){
+                incomes.get(i).setAmount(t.getAmount());
+                incomes.get(i).setDate(t.getDate());
+                incomes.get(i).setName(t.getName());
+                incomes.get(i).setDescription(t.getDescription());
                 return "Income updated Successfully";
             }
         }
@@ -68,10 +71,13 @@ public class ExpenseTrackerApp {
         expenses.add(expense);
     }
 
-    public String updateExpense(int id,Expense expense){
+    public String updateExpense(Transaction t){
         for (int i = 0; i < expenses.size(); i++) {
-            if(expenses.get(i).getID()==id){
-                expenses.add(i,expense);
+            if(expenses.get(i).getID()==t.getID()){
+                expenses.get(i).setAmount(t.getAmount());
+                expenses.get(i).setDate(t.getDate());
+                expenses.get(i).setName(t.getName());
+                expenses.get(i).setDescription(t.getDescription());
                 return "Expense updated Successfully";
             }
         }

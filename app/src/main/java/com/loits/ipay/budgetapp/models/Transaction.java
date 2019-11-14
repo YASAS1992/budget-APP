@@ -42,7 +42,7 @@ public class Transaction {
         return Amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         Amount = amount;
     }
 

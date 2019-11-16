@@ -146,7 +146,8 @@ public class ExpenseTrackerApp {
     public String updateCategory(int id, Category category){
         for (int i = 0; i < categories.size(); i++) {
             if(categories.get(i).getId()==id){
-                categories.add(i,category);
+                categories.get(i).setAmount(category.getAmount());
+                categories.get(i).setName(category.getName());
                 return "Category Updated Successfully";
             }
         }

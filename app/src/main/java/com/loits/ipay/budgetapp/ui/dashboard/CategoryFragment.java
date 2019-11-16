@@ -80,6 +80,8 @@ public class CategoryFragment extends Fragment {
 
                     mainActivity.trackerApp.updateCategory(selectedCategory.getId(),category);
                     lytEditCategory.setVisibility(View.GONE);
+                    lvCategory.setAdapter(null);
+                    loadList();
                 }
             }
         });

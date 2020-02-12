@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
     Spinner spnCategory;
     RadioGroup grpType;
     RadioButton rBtnIncome,rBtnExpense;
-    TextView etSaveTrns,etCloseTrns,etSaveCat,etCloseCat,tvTotalIncome,tvTotalExpense,tvBalance;
+    TextView etSaveTrns,etCloseTrns,etSaveCat,etCloseCat,tvTotalIncome,tvTotalExpense,tvBalance,tvTransactionTitle,tvCategoryTitle;
     LinearLayout lytExpense,lytBalance,lytIncome,lytDebt,lytGraph;
 
     Category selectedCategory;
@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment {
         lytGraph = v.findViewById(R.id.lytGraph);
 
         //Add Transaction
+        tvTransactionTitle = v.findViewById(R.id.tvTransactionTitle);
         etTrnsName = v.findViewById(R.id.etTrnsName);
         etTrnsAmount = v.findViewById(R.id.etTrnsAmount);
         etTrnsDescription = v.findViewById(R.id.etTrnsDescription);
@@ -82,6 +83,7 @@ public class HomeFragment extends Fragment {
         etCatAmount = v.findViewById(R.id.etCatProp);
         etSaveCat = v.findViewById(R.id.etSaveCat);
         etCloseCat = v.findViewById(R.id.etCloseCat);
+        tvCategoryTitle = v.findViewById(R.id.tvCategoryTitle);
 
         getSummaryData();
 
@@ -162,6 +164,7 @@ public class HomeFragment extends Fragment {
 
     public void addTransaction(){
         lytAddTransaction.setVisibility(View.VISIBLE);
+        tvTransactionTitle.setText("Add New Transaction");
         CategorySpnAdapter adapter = new CategorySpnAdapter(getContext(),mainActivity.trackerApp.getCategories());
         spnCategory.setAdapter(adapter);
 
@@ -252,6 +255,7 @@ public class HomeFragment extends Fragment {
 
     public void addCtegory(){
         lytAddCategory.setVisibility(View.VISIBLE);
+        tvCategoryTitle.setText("Add New Category");
 
         etSaveCat.setOnClickListener(new View.OnClickListener() {
             @Override

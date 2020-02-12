@@ -40,7 +40,7 @@ public class HistoryFragment extends Fragment {
 
     LinearLayout lytBottom,lytEdit,lytDelete,lytClose,lytEditTransaction;
     Transaction selectedTransaction;
-    TextView etSaveCat,etCloseCat,etSaveTrns,etCloseTrns,typeError,catError;
+    TextView etSaveCat,etCloseCat,etSaveTrns,etCloseTrns,typeError,catError,tvTransactionTitle;
 
     private EditText etTrnsName,etTrnsAmount,etTrnsDescription,etCatName, etCatAmount;
     Spinner spnCategory;
@@ -65,6 +65,7 @@ public class HistoryFragment extends Fragment {
         etCloseCat = v.findViewById(R.id.etCloseCat);
 
 
+        tvTransactionTitle = v.findViewById(R.id.tvTransactionTitle);
         etTrnsName = v.findViewById(R.id.etTrnsName);
         etTrnsAmount = v.findViewById(R.id.etTrnsAmount);
         etTrnsDescription = v.findViewById(R.id.etTrnsDescription);
@@ -142,6 +143,8 @@ public class HistoryFragment extends Fragment {
 
 
     public void updateTransaction(){
+
+        tvTransactionTitle.setText("Update Transaction");
 
         spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

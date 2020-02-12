@@ -9,6 +9,17 @@
     android:background="@color/cardview_dark_background"
     android:padding="20dp">
 
+    <TextView
+        android:id="@+id/tvTransactionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:text="Add Transaction"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#b6f235"
+        android:textSize="22sp"/>
+
     <RadioGroup
         android:id="@+id/grpType"
         android:layout_width="match_parent"

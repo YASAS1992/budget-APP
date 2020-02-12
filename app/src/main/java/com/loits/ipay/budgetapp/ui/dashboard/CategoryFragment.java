@@ -30,7 +30,7 @@ public class CategoryFragment extends Fragment {
     LinearLayout lytBottom,lytEdit,lytClose,lytEditCategory;
     Category selectedCategory;
     EditText etCatName,etCatProp;
-    TextView etSaveCat,etCloseCat;
+    TextView etSaveCat,etCloseCat,tvCategoryTitle;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +45,8 @@ public class CategoryFragment extends Fragment {
         etCatProp = v.findViewById(R.id.etCatProp);
         etSaveCat = v.findViewById(R.id.etSaveCat);
         etCloseCat = v.findViewById(R.id.etCloseCat);
+        tvCategoryTitle = v.findViewById(R.id.tvCategoryTitle);
+
         loadList();
 
 
@@ -52,6 +54,7 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 lytEditCategory.setVisibility(View.VISIBLE);
+                tvCategoryTitle.setText("Update Category");
             }
         });
 

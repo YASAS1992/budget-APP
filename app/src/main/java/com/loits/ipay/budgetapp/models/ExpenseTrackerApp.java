@@ -20,8 +20,13 @@ public class ExpenseTrackerApp {
     }
 
 
-    public void addNewIncome(Income income){
-        incomes.add(income);
+    public String addNewIncome(Income income){
+        try{
+            incomes.add(income);
+            return "Success";
+        }catch (Exception e){
+            return e.getMessage();
+        }
     }
 
     public String updateIcome(Transaction t){
@@ -67,8 +72,14 @@ public class ExpenseTrackerApp {
         return "Income Not Found";
     }
 
-    public void addNewExpense(Expense expense){
-        expenses.add(expense);
+    public String addNewExpense(Expense expense){
+        try{
+            expenses.add(expense);
+            return "Success";
+        }catch (Exception e){
+            return e.getMessage();
+        }
+
     }
 
     public String updateExpense(Transaction t){
@@ -139,8 +150,13 @@ public class ExpenseTrackerApp {
     }
 
 
-    public void addNewCategory(Category category){
-        categories.add(category);
+    public String addNewCategory(Category category){
+        try{
+            categories.add(category);
+            return "Success";
+        }catch (Exception e){
+            return e.getMessage();
+        }
     }
 
     public String updateCategory(int id, Category category){

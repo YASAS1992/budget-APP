@@ -1,5 +1,7 @@
 package com.loits.ipay.budgetapp.ui.home;
 
+import android.view.View;
+
 import androidx.test.rule.ActivityTestRule;
 
 import com.loits.ipay.budgetapp.MainActivity;
@@ -25,12 +27,6 @@ public class HomeFragmentTest {
     public void setUp() throws Exception {
         mainActivity = mainActivityActivityTestRule.getActivity();
         homeFragment = new HomeFragment();
-    }
-
-
-    @Test
-    public void testMainActivity(){
-        Assert.assertNotNull(mainActivity);
     }
 
 
